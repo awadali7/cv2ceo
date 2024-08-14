@@ -7173,7 +7173,7 @@ input:checked + .slider:before {
    .slider-one{
        height: 265px !important;
        width: 100% !important;
-       margin-left: -25px !important;
-       padding-top: 0px !important;
+       margin-left: -50px !important;
+       padding-top: -5px !important;
    }
 }
