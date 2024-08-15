@@ -1238,7 +1238,6 @@ ul.sc_list_style_iconed {
 .sc_section {
     position: relative;
     /*overflow: hidden;*/
-    padding: 1px 0;
 }
 .sc_section:after {
     content: " ";
