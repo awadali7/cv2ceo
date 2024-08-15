@@ -2183,12 +2183,14 @@ ul.sc_list_style_iconed {
 }
 .sc_testimonial_content p {
     margin: 0;
+    font-size: 18px;
 }
 .sc_testimonial_content p + p {
     margin-top: 0.5em;
 }
 .bg_tint_dark .sc_testimonials a {
     color: #ffffff;
+    font-size: 16px;
 }
 .sc_testimonials.sc_slider_swiper:hover
     .sc_slider_controls_wrap

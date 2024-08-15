@@ -189,23 +189,26 @@
 													<div class="sc_contact_form_info">
 														<div class="sc_contact_form_item sc_contact_form_field label_over">
 															<label class="required" for="sc_contact_form_username">Name</label>
-															<input id="sc_contact_form_username" type="text" name="username" placeholder="Name *">
+															<input id="sc_contact_form_username" type="text" name="username" placeholder="Name *" required>
+															<span class="error-message" id="name-error" style="display:none; color: red;">Please enter your name</span>
 														</div>
 														<div class="sc_contact_form_item sc_contact_form_field label_over">
 															<label class="required" for="sc_contact_form_email">E-mail</label>
-															<input id="sc_contact_form_email" type="text" name="email" placeholder="E-mail *">
+															<input id="sc_contact_form_email" type="email" name="email" placeholder="E-mail *" required>
+															<span class="error-message" id="email-error" style="display:none; color: red;">Please enter a valid email address</span>
 														</div>
 														<div class="sc_contact_form_item sc_contact_form_field label_over">
-															<label class="required" for="sc_contact_form_subj">Subject</label>
+															<label for="sc_contact_form_subj">Subject</label>
 															<input id="sc_contact_form_subj" type="text" name="subject" placeholder="Subject">
 														</div>
 													</div>
 													<div class="sc_contact_form_item sc_contact_form_message label_over">
 														<label class="required" for="sc_contact_form_message">Message</label>
-														<textarea id="sc_contact_form_message" name="message" placeholder="Message"></textarea>
+														<textarea id="sc_contact_form_message" name="message" placeholder="Message" required></textarea>
+														<span class="error-message" id="message-error" style="display:none; color: red;">Please enter your message</span>
 													</div>
 													<div class="sc_contact_form_item sc_contact_form_button">
-														<button>SEND MESSAGE</button>
+														<button type="submit" id="submit-button">SEND MESSAGE</button>
 													</div>
 													<div class="result sc_infobox"></div>
 												</form>
@@ -371,6 +374,74 @@
 	<script type="text/javascript" src="js/skin.customizer.min.js"></script>  
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8ad5201d19a2baa6","version":"2024.7.0","serverTiming":{"name":{"cfL4":true}},"token":"dab7be3e6ab04952b40d6c8e93f6cc2a","b":1}' crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#sc_contact_form_1").submit(function(e) {
+            e.preventDefault();
+
+            // Hide previous error messages
+            $(".error-message").hide();
+
+            // Validate form fields
+            let valid = true;
+            if ($("#sc_contact_form_username").val().trim() === "") {
+                $("#name-error").show();
+                valid = false;
+            }
+            if ($("#sc_contact_form_email").val().trim() === "" || !isValidEmail($("#sc_contact_form_email").val())) {
+                $("#email-error").show();
+                valid = false;
+            }
+            if ($("#sc_contact_form_message").val().trim() === "") {
+                $("#message-error").show();
+                valid = false;
+            }
+
+            if (!valid) {
+                return;
+            }
+
+            // Show loader
+            $("#submit-button").text("Sending...");
+            $("#submit-button").prop("disabled", true);
+
+            $.ajax({
+                url: "https://script.google.com/macros/s/AKfycbwkq10TLn0BBhyKKGHySziTuwVpQrDCLGaelw6eyesDwGYqVY_sJmbNRqWjC58WaZcy/exec",
+                data: $(this).serialize(),
+                method: "post",
+                success: function (response) {
+                    $("#sc_contact_form_1")[0].reset();
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Your message has been sent successfully",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    });
+                    $("#submit-button").text("SEND MESSAGE");
+                    $("#submit-button").prop("disabled", false);
+                },
+                error: function (err) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong. Please try again later.",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                    $("#submit-button").text("SEND MESSAGE");
+                    $("#submit-button").prop("disabled", false);
+                },
+            });
+        });
+
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    });
+</script>
 </body>
 
 
